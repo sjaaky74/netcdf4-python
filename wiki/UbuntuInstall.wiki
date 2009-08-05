@@ -1,0 +1,34 @@
+#summary How to install on Ubuntu
+
+Read on for instructions on how to install netcdf4-python on an Ubuntu Jaunty machine. The same instructions should work as well on previous versions. 
+
+= Installing the required dependencies =
+
+There are only two dependencies to install, HDF5 and netCDF4.
+
+== HDF5 ==
+
+# Download the current [http://www.hdfgroup.org/ftp/HDF5/current/src/ HDF5 source release].
+# Unpack, go into the directory and execute:
+{{{
+./configure --prefix=/usr/local --enable-shared --enable-hl
+make 
+make install
+}}}
+
+You might need to do {{{sudo make install}}}. I set up permissions on my machine so that I can write freely on /usr/local, which is where I put the stuff I install myself, but this might not be a good idea if other persons use the same machine. 
+
+== netCDF4 ==
+
+# Download the current [http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.0.1.tar.gz netCDF4 source release]. The link might not work when the version number will change, please update the page when this happens. 
+# Unpack, go into the directory and execute:
+{{{
+./configure --enable-netcdf-4 --with-hdf5=/usr/local --enable-shared --prefix=/usr/local
+make 
+make install
+}}}
+
+
+= Installing netcdf4-python = 
+When both HDF5 and netCDF4 are in /usr/local, then installing netcdf4-python is just a matter of doing:
+{{{python setup.py install}}}
