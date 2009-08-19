@@ -30,5 +30,11 @@ make install
 
 
 = Installing netcdf4-python = 
-When both HDF5 and netCDF4 are in /usr/local, then installing netcdf4-python is just a matter of doing:
-{{{python setup.py install}}}
+When both HDF5 and netCDF4 are in /usr/local, make sure the linker will be able to find those libraries by executing
+{{{
+sudo ldconfig
+}}}
+then installing netcdf4-python is just a matter of doing
+{{{
+python setup.py install
+}}}
