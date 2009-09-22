@@ -52,6 +52,6 @@ error: Command "g++ -mno-cygwin -shared build\temp.win32-2.5\Release\netcdf4.o -
 
 To fix this error, “-lhdf5 –lhdf5_hl” should be “–lhdf5_hl  -lhdf5”. To do it, I changed a line in setup.py
 
-"libs = ['netcdf','hdf5','hdf5_hl','z']"
+'libs = ['netcdf','hdf5','hdf5_hl','z']'
 to
-"libs = ['netcdf','hdf5_hl','hdf5','z']"
+'libs = ['netcdf','hdf5_hl','hdf5','z']'
