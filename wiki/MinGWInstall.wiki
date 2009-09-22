@@ -51,7 +51,10 @@ python setup.py build –c mingw32
 
 One ugly thing about compiling netCDF-0.8.2 under XP is that somehow the order of library in the call line of gcc affects how it searches libraries (hence, functions). So, it is likely the build command will choke. You will get this
 {{{
-error: Command "g++ -mno-cygwin -shared build\temp.win32-2.5\Release\netcdf4.o -LC:\netcdf4\lib -LC:\hdf5\lib -LC:\Python25\libs -LC:\Python25\PCBuild -Wl,-RC:\netcdf4\lib -Wl,-RC:\hdf5\lib -lnetcdf -lhdf5 -lhdf5_hl -lz -lpython25 -lmsvcr71
+error: Command "g++ -mno-cygwin -shared build\temp.win32-2.5\Release\netcdf4.o 
+-LC:\netcdf4\lib -LC:\hdf5\lib -LC:\Python25\libs 
+-LC:\Python25\PCBuild -Wl,-RC:\netcdf4\lib -Wl,-RC:\hdf5\lib 
+-lnetcdf -lhdf5 -lhdf5_hl -lz -lpython25 -lmsvcr71
 }}}
 To fix this error, “-lhdf5 –lhdf5_hl” should be “–lhdf5_hl  -lhdf5”. To do it, I changed a line in setup.py
 {{{
