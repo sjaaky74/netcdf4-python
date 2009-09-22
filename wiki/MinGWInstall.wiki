@@ -12,12 +12,14 @@ This page is useful only if you are absolutely sure you need to compile and inst
 Installation Guide for netCDF-0.8.2 on MinGW (32-bit XP SP3)
 
 1. zlib-1.2.3
+
 Nothing is really special about this. In my example, I just typed
 ./configure
 make install
 It will install zlib in /local
 
 2. HDF5-1.8.3-snap2 release
+
 Compile/Install in MSYS
 See below the reason for ‘snap2’
 Read and fix lines as suggested:
@@ -29,6 +31,7 @@ Note: export LIBS=”-lws2_32 –lmsvcr71” should be done instead of export LI
 ./configure --prefix=/c/hdf5 --enable-hl --with-zlib=/local/include,/local/lib
 
 3. netcdf-4.1-beta2.tar.gz
+
 Compile/Install in MSYS
 From INSTALL doc in netcdf-4.1-beta2.tar.gz
 “To use the netCDF-4 features you will also need to have a
@@ -38,6 +41,7 @@ with zlib, version 1.2.3 (or better)”
 ./configure --with-zlib=/local --enable-netcdf-4 --with-hdf5=/c/hdf5 --prefix=/c/netcdf4
 
 4. netCDF-0.8.2
+
 Compile/Install in XP Command Windows (if you set path properly in MSYS, it may work too).
 
 python setup.py build –c mingw32
