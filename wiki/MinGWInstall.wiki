@@ -1,4 +1,6 @@
+#summary How to install on XP with MinGW
 #labels Phase-Deploy
+
 Installation Guide for netCDF-0.8.2 on MinGW (32-bit XP SP3)
 
 = Introduction =
