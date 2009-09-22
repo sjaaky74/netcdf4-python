@@ -37,9 +37,11 @@ Note: export LIBS=”-lws2_32 –lmsvcr71” should be done instead of export LI
 
 Compile/Install in MSYS
 From INSTALL doc in netcdf-4.1-beta2.tar.gz
+{{{
 “To use the netCDF-4 features you will also need to have a
 HDF5-1.8.3-snap2 release installed. HDF5, in turn, must have been built
 with zlib, version 1.2.3 (or better)”
+}}}
 {{{
 ./configure --with-zlib=/local --enable-netcdf-4 --with-hdf5=/c/hdf5 --prefix=/c/netcdf4
 }}}
