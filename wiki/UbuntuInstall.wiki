@@ -16,6 +16,11 @@ make
 sudo make install
 }}}
 
+To speed things up, compile on more than one processor using
+{{{
+make -j n 
+}}}
+where n is the number of processes to be launched. 
 
 == netCDF4 ==
 
