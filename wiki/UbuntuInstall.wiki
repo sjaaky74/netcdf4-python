@@ -24,7 +24,7 @@ where n is the number of processes to be launched.
 
 == netCDF4 ==
 
- # Download the current [ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.1.tar.gz netCDF4 source release]. The link might not work when the version number will change, please update the page when this happens. 
+ # Download the current [ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.1.1-rc2.tar.gz netCDF4 source release]. The link might not work when the version number will change, please update the page when this happens. 
  # Unpack, go into the directory and execute:
 {{{
 ./configure --enable-netcdf-4 --with-hdf5=/usr/local --enable-shared --prefix=/usr/local
