@@ -1,0 +1,538 @@
+ version 0.9.4 (not yet released)
+ ================================
+ * Added a 'default_encoding' module variable that controls how unicode
+ strings are decoded. Default is 'ascii'.
+
+ * now works on Python 3.
+
+ * netCDF3 module removed. If you still need it, get it from netCDF4 0.9.3.
+
+ * regenerated C source with Cython 0.14.1.
+
+ * Added a MFTime class. Provide a unified interface to MFDataset time
+ variable using different time units.
+
+ * Fixed bug in netcdftime (issue 75) that occurs when time specified is within
+ one second of the end of the month.
+
+ * on unix-like systems, the environment variable USE_NCCONFIG can be set to
+ tell setup.py to use the nc-config script installed by netcdf to figure out
+ where all the libs and headers are (without having to specify NETCDF_DIR,
+ HDF5_DIR, etc).  Only works with recent snapshots of netcdf (from Dec 1 2010
+ onward).
+
+ version 0.9.3 (svn revision 930)
+ ================================
+ * fix chunk sizes bug (chunk sizes pointer should be size_t, not int).  Fixes
+ issue 66. Added test in tst_compression.py
+
+ * fixed writing of data with missing values with scale/offset packing. Added
+ test (tst_masked2.py).
+
+ * fix iso8601 regex in netcdftime date parser so it can parse 'hours since 1-1-1 ...'
+ (year had to be 4 digits previously)
+
+ version 0.9.2 (svn revision 907)
+ ================================
+ * fix netcdftime bug with '360_day' calendar. Fixes issue 59.
+
+ * make sure scalar slice of 1d variable returns array scalar (not array of
+   shape (1,)). Fixes issue 57.
+
+ * updated date parser in netcdftime.  Can now handle units like
+   "seconds since 1970-01-01T00:00:00Z".
+
+ * added support in setup.py for specifying the locations of the HDF5/netcdf-4 headers
+   and libs separately with environment variables (HDF5_INCDIR, HDF5_LIBDIR).i
+   Patch contributed by Patrice Dumas.
+
+ * add masked array support to num2date (dates for missing times set to None).
+
+ * add chunk_cache keyword to createVariable.  HDF5 default is 1mb, which can
+   cause problems when creating 1000's of variables.  In such cases,
+   chunk_cache can be reduced, or set to zero.  
+
+ * add set_var_chunk_cache and get_var_chunk_cache Variable methods.
+
+ * raise AttributeError when trying to set _FillValue attribute (it can only
+   be reliably set on variable creation, using the fill_value keyword to
+   createVariable).
+
+version 0.9.1 (svn revision 879)
+================================
+ * raise ImportError if netcdf-4 < 4.1.1 or hdf5 <= 1.8.4.
+
+ * add __netcdf4libversion__ and __hdf5libversion__ module variables.
+
+ * make sure data is not truncated to integers before scale_factor and
+   add_offset is applied (issue 46).
+
+ * fix bug in date2num with noleap calendar in netcdftime (issue 45).
+
+ * fix bug in 360day calendar in netcdftime (issue 44).
+
+ * python 2.4 compatibility restored (by modifying OrderedDict).  Fixes issue
+   37.
+
+ * make sure int64 attributes cast to int32 when format=NETCDF4_CLASSIC. This
+   was causing tst_multifile.py to fail on 64-bit platforms.
+
+ * fix tutorial.py to cast 64 bit integers to 32 bit when writing to 32-bit
+   integer vlen (was causing tutorial.py to fail on 64-bit platforms).
+
+ * remove nose dependency from tst_netcdftime.py.
+
+version 0.9 (svn revision 846)
+==============================
+ * fixed bug (issue 30) with date2index occurring with dates outside the support.
+
+ * make sure that auto masking works with MFDataset.
+
+ * fix bug (issue 34) when slicing MFDataset variables with dimensions of
+   length 1.
+
+ * used ordered dictionaries for variables, dimensions, groups etc to
+   preserve creation order (makes it easier to copy files, fixes issue 28).
+
+ * change auto_maskandscale default to True.  This means data will
+   automatically be converted to and from masked arrays.  Data scaled as short
+   integers using the scale_factor and add_offset attributes will also be
+   automatically converted to/from float arrays.
+
+ * add setncattr, getncattr, delncattr methods (for setting/getting/deleting netcdf
+   attributes with names that clash with the reserved python attributes).
+
+version 0.8.2 (svn revision 769)
+================================
+ * compound type tests re-enabled. Compound and vlen types now fully
+   supported in netcdf-4.1-beta2.
+
+ * make sure data retrieved from a netCDF variable is not coerced to a python
+   scalar (it should remain a numpy scalar array).
+
+ * fix docs to point out that an unlimited dimension can be created by setting
+   size to *either* None or 0 in createDimension.
+
+ * fix another slicing corner case.
+
+ * remove auto pickling/unpickling into vlen strings (too cute, sometimes
+   produced surprising results).
+
+version 0.8.1 (svn revision 744)
+================================
+ * added 'cmptypes' and 'vltypes' Group/Dataset attributes, which contain
+   dictionaries that map the names of compound and vlen types to 
+   CompoundType and VLType instances.
+
+ * Experimental variable-length (vlen) data type support added.
+
+ * changes to accomodate compound types in netcdf-4.1-beta snapshots.
+   Compound types now work correctly for snapshots >= 20090603.
+
+ * Added __len__ method and 'size' property to Variable class.
+
+ * In date2index, replaced the brute force method by the bisection method and
+   added a 'select' keyword to find the index of the date before, after or
+   nearest the given date. 
+
+ * Fixed bug occurring when indexing with a numpy array of length 1.
+   
+ * Fixed bug that occured when -1 was used as a variable index.
+
+ * enabled 'shared access' mode for NETCDF3 formatted files (mode='ws',
+   'r+s' or 'as'). Writes in shared mode are unbuffered, which can 
+   improve performance for non-sequential access.
+
+ * fixed bug in renameVariable that caused failure when new name is longer
+   than old name, and file format is NETCDF3_64BIT or NETCDF3_CLASSIC.
+
+version 0.8 (svn revision 685)
+==============================
+ * added 'stringtoarr' utility function for converting python strings
+   to numpy character arrays of a specified size.
+
+ * initial support for compound data types (which are mapped to structured
+   numpy arrays). Compound data types are created with the createCompoundTYpe
+   Dataset or Group method. Both attributes and variables can be compound
+   types.
+
+ * make sure 64-bit integer attributes converted to 32 bits when writing to
+   a NETCDF3 formatted file.
+
+ * added nc4tonc3 utility for converted NETCDF4_CLASSIC files to NETCDF3_64BIT
+   files (useful for sharing data with colleagues that don't have netcdf-4
+   capable clients).
+
+version 0.7.7 (svn revision 626)
+================================
+
+ * David Huard reworked fancy indexing - it is now much more efficient and
+   less of a memory hog. Now works differently than numpy fancy indexing - 1d
+   arrays of boolean or integer indices work independently on each dimension.
+   This enables things like:
+   >>> tempdat = temp[[0,1,3],lats>0,lons>0]
+   (retrieves 1st, 2nd and 4th levels, all Northern Hem. and Eastern
+    Hem. grid points - note that this would raise an IndexError in numpy)
+
+* added opendap test (tst_dap.py).
+
+* bugfix for nc3tonc4 utility.
+
+* fix MFDataset.Variable. __getattr__ to raise AttributeError instead of
+  KeyError when attribute not found.
+
+* netcdftime version number upped to 0.7.
+
+version 0.7.6 (svn revision 574)
+================================
+
+* added date2index function, courtesy of David Huard, which finds the indices
+  in a netCDF time variable corresponding to a sequence of datetime instances.
+
+* make _get_att/_set_att raise AttributeError instead of RuntimeError, so that
+  getattr(object, 'nonexistantattribute', None) works.  (thanks David Huard)
+
+* v[:] = data now works along unlim dim, i.e. you can do this:
+
+  file = Dataset('test.nc', "w")
+  file.createDimension("time", None)     # unlimited dimension
+  var = file.createVariable("var", 'd', ("time",))
+  # you used to have to do this
+  #var[0:10] = numpy.arange(10)
+  # but now you can simply do this
+  var[:] = numpy.arange(10)  
+
+version 0.7.5 (svn revision 549)
+================================
+* return a scalar array, not a python scalar, when a slice returns a single
+  number. This is more consistent with numpy behavior, and fixes a bug
+  in MFDataset slicing.
+* added 'exclude' parameter to MFDataset.__init__
+* added set_auto_maskandscale method to MFDataset variables.
+
+version 0.7.4 (svn revision 540)
+================================
+* ensure all arithmetic is done with float64 in netcdftime (Rob Hetland).
+* fixes for netcdf-4.0-beta2 ('chunking' keyword to createVariable
+  replaced by 'contiguous').  Now works with netcdf-4.0-beta2 and hdf5-1.8.0
+  final, but is incompatible with netcdf-4.0-beta1.
+
+version 0.7.3.1 (svn revision 507)
+==================================
+* netCDF3 docs were missing from 0.7.3.
+* make sure quantization function preserves fill_value of masked arrays.
+
+version 0.7.3 (svn revision 501)
+================================
+* MFnetCDF4 module merged into netCDF4 and netCDF3 (now
+  called MFDataset).
+* added netCDF3 module for those who can't install the netCDF 4 lib.
+* added set_auto_maskandscale Variable method to enable automatic
+  packing and unpacking of short integers (using scale_factor
+  and add_offset attributes) and automatic conversion to/from
+  masked arrays (using missing_value or _FillValue attribute)
+  on a per-variable basis.
+  var.set_auto_maskandscale(True) turns automatic
+  conversion on (it is off by default).
+* automatically pack/unpack short integer variables 
+  if scale_factor and add_offset variable attributes are set.
+* added support for masked arrays.  If you try to write a masked
+  array to a variable with the missing_value or _FillValue attributes
+  set, the masked array is filled with that value before being written
+  to the file.  If you read data from a variable with the missing_value
+  or _FillValue attribute set, a masked array is returned with the
+  appropriate values masked.
+* added date2num and num2date functions.
+* added capability to use 'fancy indexing' with variable objects 
+  (i.e. using sequences of integers or booleans in slices). WARNING:
+  if a sequence of integers or booleans is used to slice a netCDF4
+  variable, all of the data in that dimension is read into a numpy
+  array, and then the sequence is used to slice the numpy array,
+  returning just the requested elements to the user.  This can
+  potentially gobble a lot of memory and degrade performance 
+  (especially if 'fancy indexing' is done on the left-most dimension).
+* added convenience functions stringtochar and chartostring for
+  converting character arrays to arrays of fixed-length strings and
+  vice-versa.   Example usage in examples/test_stringarr.py.
+
+20070826 - version 0.7.1 (svn revision 400)
+===========================================
+* added 'endian()' and 'chunking()' Variable methods (to inquire about
+  endian and chunking variable settings).
+
+* 'ndim' attribute was not public (so it couldn't be accessed from python).
+  Fixed.
+
+* added 'endian' kwarg to createVariable (to set the endian-ness
+  used in the HDF5 file).
+
+* can now manually set HDF5 chunksizes for each dimension at
+  variable creation, using 'chunksizes' kwarg to createVariable.
+
+* added "getlibversion()" function to get info about version
+  of netcdf-4 library used to build module.
+
+* if a variable has an unsupported datatype (such as 'compound', or
+  'vlen'), then instead of raising an exception, just skip it. 
+  Print a useful error message when an attribute with an unsupported
+  datatype is accessed.
+
+* if variable dimension is specified as 'dimname' or ('dimname')
+  in createVariable, it is automatically converted to a tuple ('dimname',).
+  Better error messages when specified dimension can't be found.
+
+* createVariable accepts numpy dtype object as datatype.  dtype variable
+  attribute is now a numpy dtype object.
+
+20070723 - version 0.7 (svn revision 361)
+=========================================
+* renamed MFnetCDF4_classic --> MFnetCDF4.
+
+* eliminated netCDF4_classic module (all file formats handled by
+  netCDF4 module now).
+
+* removed all user-defined data type stuff (it was hacky and made 
+  the code too complex - wait till there is a real use case to 
+  refactor and put back in).
+
+* added 'ndim' variable attribute (number of variable dimensions).
+
+20070424 - version 0.6.3 (svn revision 302)
+===========================================
+* passes all tests with netcdf-4.0-beta1/hdf5-1.8.0-beta1.
+
+* if slice index is not a slice object, assume it's an integer (and
+  try to convert to one if it is not).  This allows numpy scalar arrays
+  to work as slice indices.
+
+* (netCDF4_classic only) try to make sure file is not left in 'define mode' 
+  when execption is raised.
+
+* if slicing a variable results in a array with shape (1,), just return 
+  a scalar (except for compound types).
+
+* added instructions for using the netCDF4_classic module to serve
+  data over http with the DAP using pydap (http://pydap.org).
+
+* added --quiet and --chunk options to nc3tonc4.
+
+* Turned off zlib compression by default so as not to violate the
+  'principle of least surprise'.  Shuffle filter still activated 
+  by default when zlib compression turned on.
+
+* Fixed bug in fletcher32 checksum activation call.  Renamed compression()
+  variable method to filters(), include fletcher32 checksum flag in output.
+
+* added utility for converting GRIB1 files to compressed
+  NETCDF4_CLASSIC files (requires PyNIO).
+
+* added 'compression()' variable method that returns a dict with
+  compression filter parameter settings for that variable. (rev 237)
+
+* reimplemented 'shape' and 'dimensions' variable attributes as
+  properties.
+
+* fixed bug when 'chunking' keyword in createVariable was set to 'sub' 
+  (caused Bus Error on MacOS X).
+
+* Setting 'shuffle=0' keyword in createVariable was turning off
+  zlib compression filter instead of shuffle filter.  Fixed.
+
+20070213 - version 0.6.2
+========================
+* updated for compatibility with netcdf-4.0-alpha18 and hdf5 1.8.0alpha5
+  (shared dimensions actually work now).
+
+* netCDF4.createVariable can now use old single character Numeric typecodes
+  for datatype specification.
+
+* Improvements to MFDataset (now called MFnetCDF4_classic) by Rob Hetland.
+ 
+20061121 - version 0.6.1
+========================
+* bugfixes for negative strides.
+
+* bugfix for empty string attributes.
+
+* support for shared dimensions (variables can use dimensions defined 
+  only in a parent group).  This doesn't actually work yet, because of
+  a bug in netcdf-4.0-alpha17.
+
+* now requires Pyrex (C source files generated on the fly when setup.py
+  is run).
+
+20061003 - version 0.6
+======================
+* if fill_value keyword to createVariable is set to the Boolean
+  False (not an integer that evaluates to False), no pre-filling
+  is done for that variable.
+
+* updated to be compatible with netcdf-4.0-alpha17.
+  Can now install pure-python netcdftime separately with setup-netcdftime.py.
+  netcdftime will try to use numpy, but fall back to Numeric if numpy 
+  not installed.
+
+* generated source files with a version of pyrex
+  (from http://codespeak.net/svn/lxml/pyrex/) that produces
+  extensions compatible with python 2.5.
+
+* added new module for multi-file access of NETCDF3 and NETCDF4_CLASSIC
+  files (MFDataset). Based on CDFMF from pycdf.
+
+* implement negative strides in variable slicing
+  (feature missing from Scientific.IO.NetCDF). Now variables support
+  full python extended slicing syntax.
+
+20060925 - version 0.5.1
+========================
+* on 64-bit systems integer attributes in netCDF4_classic failed, since there
+  is no 64-bit integer data type. Fixed by downcasting to 32-bit integer.
+
+20060920 - version 0.5
+======================
+* Compound type support! (members must be fixed data primitive types -
+  no user-defined types or NC_STRING variables allowed).  Attributes
+  are still restricted to primitive data types (no vlen or compound
+  type attributes).
+
+* Assigning single values to a slice now does the Right Thing, i.e.
+  >>> data[:] = 1
+  fills all the elements with 1 (instead of raising an IndexError).
+
+* Tested with numpy 1.0b5, netcdf-4.0-alpha16, HDF5 1.7.52 alpha.
+
+* Added renameDimension and renameVariable methods to Dataset and Group classes.
+
+* netCDF attributes can be deleted using python del (i.e. 'del dset.foo').
+
+* Moved examples from test and test_classic to examples and 
+  examples_classic directories.
+
+* Added proper unit tests (in test and test_classic directories).
+
+* NULL characters are removed from text attributes.
+
+* Variable _FillValue can be set using new keyword argument 'fill_value' 
+  to createVariable Dataset and Group method.
+
+* docstrings now formatted with epydoc (http://epydoc.sf.net).
+
+* improved Scientific.IO.NetCDF compatibility for netCDF4_classic
+  (typecode method, ability to use old Numeric typecodes).
+
+* zlib=False or complevel=0 disables shuffle filter in createVariable.
+
+* subversion repository hosted on Google projects
+  (http://code.google.com/p/netcdf4-python/).
+
+* examples_classic/bench2.py is a performance comparison with
+  Scientific.IO.NetCDF (the numpy version provided by pynetcdf).
+
+* __dict__ attribute of Dataset, Group or Variable provides a python
+  dictionary with all netCDF attribute name/value pairs (just like
+  Scientific.IO.NetCDF).
+
+20060710 - version 0.4.5
+========================
+* fixed to work with recent svn versions of numpy
+
+* Now requires at least numpy 0.9.8.
+
+* Raise a AttributeError if user tries to rebind a private attribute
+  (like 'variables', 'dimensions' or 'dtype').
+
+20060629 - version 0.4.4
+========================
+* fixed to work with netcdf-4.0-alpha14.
+
+* automatically cast _FillValue attribute to variable type, to
+  avoid surprising error message.
+
+20060320 - version 0.4.3
+========================
+updated netcdftime module yet again
+added 'all_leap'/'366_day' and '360_day' calendars.
+netCDFTime class renamed utime, fwd and inv methods
+renamed date2num and num2date. These methods can now handle
+numpy arrays as well as scalars.
+a 'real' python datetime instance is returned if calendar
+is gregorian, otherwise a 'datetime-like' instance is returned
+(python datetime can't handle funky dates in 'all_leap' and '360_day'
+calendars).
+
+20060316 - version 0.4.2
+========================
+udunits module replaced by pure python version, renamed 'netcdftime'
+No longer requires udunits library. Includes 4 calendars
+('julian','standard'/'gregorian','proleptic_gregorian','noleap'/'365_day').
+Calendar names and their interpretations follow the CF metadata convention.
+
+20060310 - version 0.4.1
+========================
+udunits module included for doing time conversions.
+
+20060306 - version 0.4
+======================
+
+netCDF4_classic module can now write NETCDF3_CLASSIC, NETCDF4_64BIT
+as well as NETCDF4_CLASSIC files.  The file format is given as
+an optional keyword to the Dataset constructor ('NETCDF4_CLASSIC'
+is the default).  Preliminary work on compound types done - but
+awaiting the next alpha of the netCDF 4 library to complete (bugs
+in alpha12 prevent it from working properly if the compound type
+has fields which are arrays).
+
+20060217 - version 0.3.1
+========================
+refactored user-defined data type support - user-defined
+data types are now described by an instance of the class
+UserType.  usertype and usertype_name keyword args
+eliminated from createVariable.
+
+20060214 - version 0.3
+======================
+support for variable length strengths (typecode = 'S') and
+variable-length, or 'ragged' arrays (vlen user-defined datatype).
+Arrays of python objects can be saved as pickled strings with
+datatype = 'S'.
+
+20050128 - version 0.2.5
+========================
+added support for scalar variables (and assignValue, getValue
+Variable methods for Scientific.IO.NetCDF compatibility).
+
+20051123 - version 0.2.4
+========================
+numpy 0.9.4 compatibility
+Changed data type codes from ('d', 'f', 'i', 'h', ...) to
+('f8', 'f4', 'i4', 'i2', ...).
+
+20050110 - version 0.2.3
+========================
+added ellipsis slicing capability
+
+20050106 - version 0.2.2
+========================
+changed scipy_core to numpy.
+
+20051228 - version 0.2.1
+========================
+bugfixes, added 'nc3tonc4' utility to convert netCDF version 3 files
+to NETCDF4_CLASSIC files (with compression).  The converted files
+can be read from netCDF 3 clients that have been re-linked to the netCDF 4
+library. 'chunking' keyword added to createVariable in netCDF4 module.
+
+20051224 - version 0.2
+======================
+Added netCDF4_classic module - which creates files in NETCDF4_CLASSIC
+format.  These files are compatible with netCDF 3 clients which have
+been linked against the netCDF 4 lib.  This module does not use any
+new features of the netCDF 4 API except zlib compression.  Unlike
+any other netCDF 3 python client, it can transparently compress data
+with zlib compression and the HDF5 shuffle filter.
+
+20051222 - version 0.1
+======================
+First release.  Supports groups, multiple unlimited dimensions, zlib
+compression (plus shuffle filter and fletcher32 checksum) and all new
+primitive data types.  No support for user-defined data types yet.
