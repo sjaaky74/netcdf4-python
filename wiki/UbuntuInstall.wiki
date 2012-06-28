@@ -27,7 +27,7 @@ where n is the number of processes to be launched.
  # Download the current [ftp://ftp.unidata.ucar.edu/pub/netcdf/ netCDF4 source release]. 
  # Unpack, go into the directory and execute:
 {{{
-LDFLAGS=-L/usr/local/lib CPPFLAGS=-/usr/local/include ./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=/usr/local
+LDFLAGS=-L/usr/local/lib CPPFLAGS=-I/usr/local/include ./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=/usr/local
 make 
 make install
 }}}
